@@ -26,6 +26,30 @@
         <source-file src="src/android/source/SCPluginContact.java" target-dir="src/com/sc/contacts"/>
         <framework src="src/android/build.gradle" custom="true" type="gradleReference"/>
 
+        <edit-config file="AndroidManifest.xml" target="/manifest/application/activity[@android:name='MainActivity']" mode="overwrite">
+            <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale" android:label="@string/activity_name" android:launchMode="singleTop" android:name="MainActivity" android:screenOrientation="portrait" android:theme="@android:style/Theme.DeviceDefault.NoActionBar" android:windowSoftInputMode="adjustResize">
+                <intent-filter android:label="@string/launcher_name">
+                    <action android:name="android.intent.action.MAIN" />
+                    <category android:name="android.intent.category.LAUNCHER" />
+                </intent-filter>
+
+                <intent-filter>
+                    <action android:name="android.intent.action.VIEW" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                    <category android:name="android.intent.category.BROWSABLE" />
+                    <data android:scheme="http"
+                          android:host="www.sccfc.cn"/>
+                </intent-filter>
+                <intent-filter>
+                    <action android:name="android.intent.action.VIEW" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                    <category android:name="android.intent.category.BROWSABLE" />
+                    <data android:scheme="https"
+                          android:host="www.sccfc.cn"/>
+                </intent-filter>
+            </activity>
+        </edit-config>
+
     </platform>
     <!-- 其他平台的代码 -->
 	
