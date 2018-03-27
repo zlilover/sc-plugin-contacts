@@ -39,7 +39,7 @@
                     NSLog(@"授权失败, error = %@", error);
                 }
             }];
-        } else if (status == CNAuthorizationStatusAuthorized) {
+        } else if (authorizationStatus == CNAuthorizationStatusAuthorized) {
             [self getMyAddressBook];
         }
     } else {
