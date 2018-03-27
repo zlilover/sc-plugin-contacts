@@ -39,38 +39,37 @@
                     NSLog(@"授权失败, error = %@", error);
                 }
             }];
+        } else if (status == CNAuthorizationStatusAuthorized) {
+            [self getMyAddressBook];
         }
-    }else{
+    } else {
         NSLog(@"请升级系统");
     }
 }
 
 -(void)getMyAddressBook{
-    CNAuthorizationStatus authorizationStatus = [CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts];
-    if (authorizationStatus == CNAuthorizationStatusAuthorized) {
-        self.myArr = [NSMutableArray array];
-        NSArray *keysToFetch = @[CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey];
-        CNContactFetchRequest *fetchRequest = [[CNContactFetchRequest alloc] initWithKeysToFetch:keysToFetch];
-        CNContactStore *contactStore = [[CNContactStore alloc] init];
-        [contactStore enumerateContactsWithFetchRequest:fetchRequest error:nil usingBlock:^(CNContact * _Nonnull contact, BOOL * _Nonnull stop) {
-            NSMutableArray *phoneArr = [NSMutableArray array];
-            NSMutableDictionary *contactDic = [NSMutableDictionary dictionary];
-            NSString *nameStr = [NSString stringWithFormat:@"%@%@",contact.familyName,contact.givenName];
-            NSArray *phoneNumbers = contact.phoneNumbers;
-            for (CNLabeledValue *labelValue in phoneNumbers) {
-                CNPhoneNumber *phoneValue = labelValue.value;
-                phoneNumber = [self changeString:phoneValue.stringValue];
-                [phoneArr addObject:phoneNumber];
-            }
-            [contactDic setObject:nameStr forKey:@"contactName"];
-            [contactDic setObject:phoneArr forKey:@"phoneNos"];
-            [_myArr addObject:contactDic];
-        }];
-        
-        NSString *Str = [self arrayToJson:_myArr];
-        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:Str];
-        [self.commandDelegate sendPluginResult:result callbackId:urlCommand.callbackId];
-    }
+    self.myArr = [NSMutableArray array];
+    NSArray *keysToFetch = @[CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey];
+    CNContactFetchRequest *fetchRequest = [[CNContactFetchRequest alloc] initWithKeysToFetch:keysToFetch];
+    CNContactStore *contactStore = [[CNContactStore alloc] init];
+    [contactStore enumerateContactsWithFetchRequest:fetchRequest error:nil usingBlock:^(CNContact * _Nonnull contact, BOOL * _Nonnull stop) {
+        NSMutableArray *phoneArr = [NSMutableArray array];
+        NSMutableDictionary *contactDic = [NSMutableDictionary dictionary];
+        NSString *nameStr = [NSString stringWithFormat:@"%@%@",contact.familyName,contact.givenName];
+        NSArray *phoneNumbers = contact.phoneNumbers;
+        for (CNLabeledValue *labelValue in phoneNumbers) {
+            CNPhoneNumber *phoneValue = labelValue.value;
+            phoneNumber = [self changeString:phoneValue.stringValue];
+            [phoneArr addObject:phoneNumber];
+        }
+        [contactDic setObject:nameStr forKey:@"contactName"];
+        [contactDic setObject:phoneArr forKey:@"phoneNos"];
+        [_myArr addObject:contactDic];
+    }];
+
+    NSString *Str = [self arrayToJson:_myArr];
+    CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:Str];
+    [self.commandDelegate sendPluginResult:result callbackId:urlCommand.callbackId];
 }
 
 - (NSString*)arrayToJson:(NSArray *)arr
