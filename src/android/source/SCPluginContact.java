@@ -84,7 +84,7 @@ public class SCPluginContact extends CordovaPlugin {
             resolveIntent.addCategory(Intent.CATEGORY_LAUNCHER);
             resolveIntent.setPackage(packageInfo.packageName);
             List<ResolveInfo> resolveinfoList = context.getPackageManager().queryIntentActivities(resolveIntent, 0);
-            if (resolveinfoList != null && info.isUserApp()) {
+            if (resolveinfoList != null  && resolveinfoList .size() > 0 && info.isUserApp()) {
                 info.setAppLuncherClass(resolveinfoList.get(0).activityInfo.name);
             }
             // 获取该应用安装包的Intent，用于启动该应用
