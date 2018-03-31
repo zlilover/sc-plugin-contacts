@@ -84,12 +84,10 @@ public class SCPluginContact extends CordovaPlugin {
             resolveIntent.addCategory(Intent.CATEGORY_LAUNCHER);
             resolveIntent.setPackage(packageInfo.packageName);
             List<ResolveInfo> resolveinfoList = context.getPackageManager().queryIntentActivities(resolveIntent, 0);
-            if (resolveinfoList != null  && resolveinfoList .size() > 0) {
+            if (resolveinfoList != null  && resolveinfoList .size() > 0 && info.isUserApp()) {
                 info.setAppLuncherClass(resolveinfoList.get(0).activityInfo.name);
             }
-            if (info.isUserApp()) {
-                appList.add(info);
-            }
+            appList.add(info);
         }
         return appList;
     }
